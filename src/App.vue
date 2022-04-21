@@ -1,26 +1,21 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <flight-view></flight-view>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import FlightView from './components/FlightView.vue'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    FlightView
+  },
+  created () {
+      document.title = "今天航班熔断了吗？";
   }
 }
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+
 </style>
