@@ -1,4 +1,8 @@
-# vuex_demo
+# 今天航班熔断了吗？
+
+根据已知的阳性病例数推断航班熔断情况。
+
+[link](https://nekonull.me/rongduan/)
 
 ## Project setup
 ```
