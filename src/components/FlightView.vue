@@ -37,6 +37,7 @@
             :triggerStatus="item.triggerStatus"
             :flightStatus="item.flightStatus"
             :enabled="item.enabled"
+            :surely="item.surely"
             @itemChange="itemChangeHandler"
           ></date-item>
         </div>
@@ -95,6 +96,7 @@ export default {
           triggerStatus: "ok",
           flightStatus: "yes",
           enabled: true, // 取消
+          surely: false, // 稳
         });
       }
 
@@ -109,8 +111,6 @@ export default {
 
       this.datesDetails = targetDatesDetails;
 
-
-
       this.reCalculate();
     },
     itemChangeHandler(param) {
@@ -120,11 +120,14 @@ export default {
     },
     reCalculate() {
       console.log("recalculating...");
+
+      // 状态重置
       for (let i = 0; i < this.datesDetails.length; i++) {
         let item = this.datesDetails[i];
 
         item.triggerStatus = "ok";
         item.flightStatus = "yes";
+        item.surely = false;
 
         if (!item.enabled) {
           item.triggerStatus = "cancelled";
@@ -132,6 +135,7 @@ export default {
         }
       }
 
+      // 计算熔断
       for (let i = 0; i < this.datesDetails.length; i++) {
         let item = this.datesDetails[i];
         let breakWeekCount = 0;
@@ -186,6 +190,34 @@ export default {
           j++;
         }
       }
+
+      // 计算稳的航班
+      // 稳的航班：连续触发熔断（或者被取消）的航班和被熔断的航班相连，熔断结束后的头两个航班是一定安全的
+      let i = 0;
+      
+      while (i < this.datesDetails.length) {
+        
+        if (this.datesDetails[i].flightStatus === "no" 
+            && i - 1 >= 0 
+            &&  ["major", "minor", "immediate"].includes(this.datesDetails[i-1].triggerStatus)) {
+          console.log(i)
+          while (this.datesDetails[i].flightStatus === "no") {
+            i++;
+          }
+          let safeCount = 2;
+          while (safeCount > 0 && i < this.datesDetails.length) {
+            if (this.datesDetails[i].flightStatus === "yes") {
+              safeCount--;
+              this.datesDetails[i].surely = true;
+            }
+            i++;
+          }
+        }
+
+        i++;
+      }
+
+
     },
   },
 };

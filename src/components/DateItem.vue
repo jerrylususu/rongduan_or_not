@@ -3,7 +3,7 @@
         {{date}}
         <a-switch v-model:checked="localEnabled" size="small" @change="enabledChangeHandler"></a-switch>
         <a-input-number v-model:value="localCount" @change="countChangeHandler" :min="0" :disabled="!localEnabled"></a-input-number>
-        <a-button :class="triggerStatus">{{triggerStatusName}}</a-button>
+        <a-button :class="triggerStatus">{{surelyStr + triggerStatusName}}</a-button>
         <span v-if="flightStatus === 'yes' "><check-outlined /></span>
         <span v-else> <stop-outlined /></span>
     </a-card>
@@ -29,7 +29,8 @@ export default {
         },
         count: {
             type: Number,
-            required: true
+            required: false,
+            default: 0,
         },
         index: {
             type: Number,
@@ -46,7 +47,11 @@ export default {
         enabled: {
             type: Boolean,
             required: true,
-        }
+        },
+        surely: {
+            type: Boolean,
+            required: true,
+        },
     },
     emits: ['itemChange'],
     data() {
@@ -92,8 +97,11 @@ export default {
             } else {
                 return this.triggerStatus.replace("broken by", "熔断，触发于")
             }
-            
+
         },
+        surelyStr() {
+            return this.surely ? "(稳)" : ""
+        }
     },
     watch: { // 避免 props 和本地状态不同步
         count: {
