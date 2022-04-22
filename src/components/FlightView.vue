@@ -207,7 +207,7 @@ export default {
       // 计算稳的航班
       // 稳的航班：连续触发熔断（或者被取消）的航班和被熔断的航班相连，熔断结束后的头两个航班是一定安全的
       let i = 0;
-      
+      let surelyMarked = false
       while (i < this.datesDetails.length) {
         
         if (this.datesDetails[i].flightStatus === "no" 
@@ -222,11 +222,16 @@ export default {
             if (this.datesDetails[i].flightStatus === "yes") {
               safeCount--;
               this.datesDetails[i].surely = true;
+              surelyMarked = true;
             }
             i++;
           }
         }
 
+        if (surelyMarked) {
+          surelyMarked = false;
+          i--;
+        }
         i++;
       }
 
