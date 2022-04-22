@@ -10,7 +10,7 @@
 
         <p>不考虑奖励航班和控制客座率措施</p>
         <!-- <br /> -->
-        首个航班日期：<a-date-picker
+        首个航班入境日期：<a-date-picker
           v-model:value="beginDate"
           @change="inputHandler"
         ></a-date-picker>
@@ -18,7 +18,7 @@
         周数：<a-input-number
           v-model:value="numberOfWeeks"
           :min="1"
-          :max="20"
+          :max="40"
           @change="inputHandler"
         />
       </a-col>
