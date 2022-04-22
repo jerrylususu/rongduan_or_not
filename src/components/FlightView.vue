@@ -123,6 +123,7 @@ export default {
         let item = this.datesDetails[i];
         let breakWeekCount = 0;
         let advanceWeek = 0;
+        let forceImmediateBreak = false;
 
         if (item.flightStatus === "yes") {
           if (0 <= item.count && item.count < 5) {
@@ -135,6 +136,16 @@ export default {
             item.triggerStatus = "major";
             breakWeekCount = 4;
             advanceWeek = 4 - 1;
+
+            // special case: 连续两周 10+，立刻熔断八周
+            if (i - 1 >= 0) {
+              let prevItem = this.datesDetails[i - 1];
+              if (prevItem.count >= 10) {
+                breakWeekCount = 8;
+                advanceWeek = 1;
+                forceImmediateBreak = true;
+              }
+            }
           } else {
             item.triggerStatus = "immediate";
             breakWeekCount = 4;
@@ -145,15 +156,20 @@ export default {
         let j = 0;
         while (
           breakWeekCount > 0 &&
-          i + advanceWeek + j < this.datesDetails.length
+          (i + advanceWeek + j < this.datesDetails.length)
         ) {
-          if (this.datesDetails[i + advanceWeek + j].flightStatus === "yes") {
-            this.datesDetails[i + advanceWeek + j].flightStatus = "no";
-            this.datesDetails[
-              i + advanceWeek + j
-            ].triggerStatus = `broken by ${item.date}`;
-            breakWeekCount--;
+          let futureItem = this.datesDetails[i + advanceWeek + j];
+          if (futureItem.enabled) {
+            if (futureItem.flightStatus === "yes" || forceImmediateBreak) {
+              futureItem.flightStatus = "no";
+              futureItem.triggerStatus = `broken by ${item.date}`;
+              breakWeekCount--;
+              if (breakWeekCount === 0) {
+                forceImmediateBreak = false;
+              }
+            }
           }
+
           j++;
         }
       }
