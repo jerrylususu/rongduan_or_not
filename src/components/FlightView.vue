@@ -24,6 +24,16 @@
         
         <p>图例：日期，取消开关，阳性数量 -> 熔断状态，航班状态 <br/>
         地区提示：美国：航司可能对航班进行<a href="https://piao.tips/7bc7e7ee15/" target="_blank">「规律性取消」</a>，可使用航班卡片中的开关手动取消特定航班。</p>
+
+        <a-collapse>
+          <a-collapse-panel key="states" header="状态说明">
+            <p>正常：航班状态正常（0~4 例阳性，不触发熔断）</p>
+            <p>小熔断：5~9 例阳性，触发航班入境第四周起的 2 周熔断</p>
+            <p>大熔断：10~30 例阳性，触发航班入境第四周起的 4 周熔断（若连续两周 10 例或以上阳性，立刻触发 4 周熔断）</p>
+            <p>超级熔断：30 例以上阳性，立即触发 4 周熔断</p>
+            <p>(稳)：（实验性）若触发连续熔断，熔断恢复后的头两班是一定能正常执飞的。</p>
+          </a-collapse-panel>
+        </a-collapse>
       </a-col>
     </a-row>
 
@@ -54,6 +64,7 @@ import {
   Space,
   Row,
   Col,
+  Collapse,
 } from "ant-design-vue";
   import { GithubOutlined } from '@ant-design/icons-vue';
 
@@ -70,6 +81,8 @@ export default {
     ARow: Row,
     ACol: Col,
     GithubOutlined,
+    ACollapse: Collapse,
+    ACollapsePanel: Collapse.Panel,
   },
   data() {
     return {
