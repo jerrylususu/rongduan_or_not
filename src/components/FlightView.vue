@@ -22,8 +22,8 @@
           @change="inputHandler"
         />
         
-        <p>图例：日期，是否取消，阳性数量 -> 熔断状态，航班状态 <br/>
-        地区提示：美国：航司可能对航班进行<a href="https://piao.tips/7bc7e7ee15/" target="_blank">「规律性取消」</a></p>
+        <p>图例：日期，取消开关，阳性数量 -> 熔断状态，航班状态 <br/>
+        地区提示：美国：航司可能对航班进行<a href="https://piao.tips/7bc7e7ee15/" target="_blank">「规律性取消」</a>，可使用航班卡片中的开关手动取消特定航班。</p>
       </a-col>
     </a-row>
 
