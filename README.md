@@ -9,8 +9,12 @@
 * 航班入境为第一周
 * 阳性病例计数范围：入境当日 - 入境后第七天
 * 若熔断时间重叠，则向后顺延
+* 若连续两周 10 例或以上阳性，立刻熔断八周
 
 [link](https://nekonull.me/rongduan/)
+
+icon credit: https://thenounproject.com/icon/flight-1388095/
+
 
 ## Project setup
 ```
