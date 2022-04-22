@@ -21,6 +21,9 @@
           :max="40"
           @change="inputHandler"
         />
+        
+        <p>图例：日期，是否取消，阳性数量 -> 熔断状态，航班状态 <br/>
+        地区提示：北美：航司可能对航班进行<a href="https://piao.tips/7bc7e7ee15/" target="_blank">「规律性取消」</a></p>
       </a-col>
     </a-row>
 
@@ -33,7 +36,8 @@
             :index="index"
             :triggerStatus="item.triggerStatus"
             :flightStatus="item.flightStatus"
-            @countChange="countChangeHandler"
+            :enabled="item.enabled"
+            @itemChange="itemChangeHandler"
           ></date-item>
         </div>
       </a-col>
@@ -92,18 +96,27 @@ export default {
           count: 0,
           triggerStatus: "ok",
           flightStatus: "yes",
+          enabled: true, // 取消
         });
       }
     },
-    countChangeHandler(param) {
+    itemChangeHandler(param) {
       this.datesDetails[param.index].count = param.count;
+      this.datesDetails[param.index].enabled = param.enabled;
       this.reCalculate();
     },
     reCalculate() {
       console.log("recalculating...");
       for (let i = 0; i < this.datesDetails.length; i++) {
-        this.datesDetails[i].triggerStatus = "ok";
-        this.datesDetails[i].flightStatus = "yes";
+        let item = this.datesDetails[i];
+
+        item.triggerStatus = "ok";
+        item.flightStatus = "yes";
+
+        if (!item.enabled) {
+          item.triggerStatus = "cancelled";
+          item.flightStatus = "no";
+        }
       }
 
       for (let i = 0; i < this.datesDetails.length; i++) {
