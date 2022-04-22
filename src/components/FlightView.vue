@@ -84,7 +84,9 @@ export default {
       for (let i = 1; i <= this.numberOfWeeks; i++) {
         let date = new Date(this.beginDate);
         date.setDate(date.getDate() + (i - 1) * 7);
-        let dateString = date.toISOString().split("T")[0];
+        let dateString = new Date(date.getTime() - (date.getTimezoneOffset() * 60000 ))
+                    .toISOString()
+                    .split("T")[0];
         this.datesDetails.push({
           date: dateString,
           count: 0,
