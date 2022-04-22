@@ -81,17 +81,15 @@ export default {
     inputHandler(value) {
       if (!value) return;
 
-      // clear array
-      this.datesDetails.splice(0, this.datesDetails.length);
-
       // repopulate
+      let targetDatesDetails = []
       for (let i = 1; i <= this.numberOfWeeks; i++) {
         let date = new Date(this.beginDate);
         date.setDate(date.getDate() + (i - 1) * 7);
         let dateString = new Date(date.getTime() - (date.getTimezoneOffset() * 60000 ))
                     .toISOString()
                     .split("T")[0];
-        this.datesDetails.push({
+        targetDatesDetails.push({
           date: dateString,
           count: 0,
           triggerStatus: "ok",
@@ -99,6 +97,21 @@ export default {
           enabled: true, // 取消
         });
       }
+
+      for(let i = 0; i < targetDatesDetails.length; i++) {
+        let match = this.datesDetails.filter(x => x.date === targetDatesDetails[i].date)
+        if (match.length == 1) {
+          targetDatesDetails[i].count = match[0].count;
+          targetDatesDetails[i].enabled = match[0].enabled;
+        }
+        this.datesDetails.push(targetDatesDetails[i]);
+      }
+
+      this.datesDetails = targetDatesDetails;
+
+
+
+      this.reCalculate();
     },
     itemChangeHandler(param) {
       this.datesDetails[param.index].count = param.count;

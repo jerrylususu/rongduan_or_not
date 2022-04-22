@@ -94,6 +94,20 @@ export default {
             }
             
         },
+    },
+    watch: { // 避免 props 和本地状态不同步
+        count: {
+            handler(value) {
+                this.localCount = value
+            },
+            immediate: true
+        },
+        enabled: {
+            handler(value) {
+                this.localEnabled = value
+            },
+            immediate: true
+        },
     }
 }
 </script>
