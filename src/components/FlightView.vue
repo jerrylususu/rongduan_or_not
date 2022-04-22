@@ -73,7 +73,7 @@ export default {
   data() {
     return {
       beginDate: "",
-      numberOfWeeks: 12,
+      numberOfWeeks: 20,
       datesDetails: [],
     };
   },
