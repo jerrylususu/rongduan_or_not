@@ -146,13 +146,16 @@ function buildEmptyList(numberOfWeeks, beginDate) {
     return targetDatesDetails
 }
 
-function applyCountState(datesDetails, countState) {
+function applyState(datesDetails, countState, enableState) {
     for (let [idx, val] of countState.entries()) {
         datesDetails[idx].count = val;
     }
+    for (let [idx, val] of enableState.entries()) {
+        datesDetails[idx].enabled = val;
+    }
 }
 
-function buildInitialCountState(datesDetails, numberOfWeeks, knownWeekCount){
+function buildInitialState(datesDetails, numberOfWeeks, knownWeekCount){
     let countState = []
     for (let i = 0; i < numberOfWeeks; i++) {
         countState.push(0)
@@ -160,7 +163,8 @@ function buildInitialCountState(datesDetails, numberOfWeeks, knownWeekCount){
     for (let i = 0; i < knownWeekCount; i++) {
         countState[i] = datesDetails[i].count
     }
-    return countState
+    let enableState = datesDetails.map(item => item.enabled)
+    return [countState, enableState]
 }
 
 function generateNext(datesDetails, currentSequence, probMap) {
@@ -179,7 +183,7 @@ function generateNext(datesDetails, currentSequence, probMap) {
 
     let nextUndertermined = lastActedIndex + 1
     while (nextUndertermined < datesDetails.length && 
-            datesDetails[nextUndertermined].triggerStatus !== "ok") {
+            (datesDetails[nextUndertermined].triggerStatus !== "ok" || !datesDetails[nextUndertermined].enabled)) {
         nextUndertermined++
     }
 
@@ -199,7 +203,7 @@ function generateNext(datesDetails, currentSequence, probMap) {
     return results
 }
 
-function getDailyResult(datesDetails, completedActions, initialState) {
+function getDailyResult(datesDetails, completedActions, initialCountState, initialEnableState) {
     let dayToStatusMap = {}
 
     for (let item of datesDetails){
@@ -207,6 +211,7 @@ function getDailyResult(datesDetails, completedActions, initialState) {
     }
 
     for (let actions_and_prob of completedActions) {
+        applyState(datesDetails, initialCountState, initialEnableState)
         let [actions, prob] = actions_and_prob
         for (let i=0; i < actions.length; i++) {
             let [action, idx] = actions[i]
@@ -233,13 +238,15 @@ function simulationMain(simConfig){
     // debugger;
     let {datesDetails, beginDate, numOfWeeks, knownWeekCount, probMap} = simConfig;
 
+    console.log("datesDetails", datesDetails)
+
     let workingDatesDetails = buildEmptyList(numOfWeeks, beginDate);
-    let initialState = buildInitialCountState(datesDetails, numOfWeeks, knownWeekCount); 
+    let [initialCountState, initialEnableState] = buildInitialState(datesDetails, numOfWeeks, knownWeekCount); 
     let possibleActions =  [[ [["nop", knownWeekCount - 1]] ,1]] 
     let completedActions = []
 
     while(possibleActions.length > 0){
-        applyCountState(workingDatesDetails, initialState)
+        applyState(workingDatesDetails, initialCountState, initialEnableState)
         let currentSequence = possibleActions.shift()
         let nextSteps = generateNext(workingDatesDetails, currentSequence, probMap)
         if (nextSteps === null) {
@@ -252,8 +259,41 @@ function simulationMain(simConfig){
     console.log("sim done")
     console.log(`prob sum: ${completedActions.map(x => x[1]).reduce((a, b) => a + b, 0)}`)
 
-    let results = getDailyResult(workingDatesDetails, completedActions, initialState)
-    console.log(results)   
+    let results = getDailyResult(workingDatesDetails, completedActions, initialCountState, initialEnableState)
+    return results
 }
 
-export { simulationMain, calculate, buildEmptyList };
+// https://gist.github.com/nikolas/b0cce2261f1382159b507dd492e1ceef
+/**
+ * A linear interpolator for hex colors.
+ *
+ * Based on:
+ * https://gist.github.com/rosszurowski/67f04465c424a9bc0dae
+ *
+ * @param {Number} a  (hex color start val)
+ * @param {Number} b  (hex color end val)
+ * @param {Number} amount  (the amount to fade from a to b)
+ *
+ * @example
+ * // returns 0x7f7f7f
+ * lerpColor(0x000000, 0xffffff, 0.5)
+ *
+ * @returns {Number}
+ */
+ const lerpColor = function(a, b, amount) {
+  const ar = a >> 16,
+        ag = a >> 8 & 0xff,
+        ab = a & 0xff,
+
+        br = b >> 16,
+        bg = b >> 8 & 0xff,
+        bb = b & 0xff,
+
+        rr = ar + amount * (br - ar),
+        rg = ag + amount * (bg - ag),
+        rb = ab + amount * (bb - ab);
+
+  return '#' + ((1 << 24) + (rr << 16) + (rg << 8) + rb | 0).toString(16).slice(1);
+};
+
+export { simulationMain, calculate, buildEmptyList, lerpColor };

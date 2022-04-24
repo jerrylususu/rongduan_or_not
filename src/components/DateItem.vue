@@ -1,17 +1,19 @@
 <template>
     <a-card :class="[flightStatus]">
-        {{date}}
+        第 {{index+1}} 周:  {{date}}
         <a-switch v-model:checked="localEnabled" size="small" @change="enabledChangeHandler"></a-switch>
         <a-input-number v-model:value="localCount" @change="countChangeHandler" :min="0" :disabled="!localEnabled"></a-input-number>
         <a-button :class="triggerStatus">{{surelyStr + triggerStatusName}}</a-button>
         <span v-if="flightStatus === 'yes' "><check-outlined /></span>
         <span v-else> <stop-outlined /></span>
+        <a-button type="dashed" :style="probColor" v-if="showProb">{{(yesProb * 100).toFixed(2) + '%' }}</a-button>
     </a-card>
 </template>
 
 <script>
   import { Button, InputNumber, Card, Switch } from 'ant-design-vue';
   import { CheckOutlined, StopOutlined } from '@ant-design/icons-vue';
+  import { lerpColor } from '../utils/simulation';
 
 export default {
     components: {
@@ -52,6 +54,16 @@ export default {
             type: Boolean,
             required: true,
         },
+        showProb: {
+            type: Boolean,
+            required: false,
+            default: false,
+        },
+        yesProb: {
+            type: Number,
+            required: false,
+            default: 0,
+        }
     },
     emits: ['itemChange'],
     data() {
@@ -101,7 +113,14 @@ export default {
         },
         surelyStr() {
             return this.surely ? "(稳)" : ""
-        }
+        },
+        probColor() {
+            let textColor = this.yesProb > 0.6 ? "white" : "black"
+            return {
+                "background-color": lerpColor(0xe3f2fd, 0x0d47a1, this.yesProb),
+                "color": textColor,
+            }
+        },
     },
     watch: { // 避免 props 和本地状态不同步
         count: {
