@@ -46,6 +46,7 @@
 
             <br />
 
+            <a-alert v-show="!enableSimulation" message="未开启本功能，请拨动左上角的开关" type="warning" show-icon />
             <a-alert v-show="!probSumValid" message="概率和不为 100%" type="error" show-icon />
             <a-alert v-show="!initialized" message="未填写首个航班入境日期" type="error" show-icon />
             
