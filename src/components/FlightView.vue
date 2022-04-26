@@ -5,11 +5,11 @@
       <a-col :lg="12" :md="24">
         <h1>今天航班熔断了吗？</h1>
         <hr />
-        <a-button href="http://www.caac.gov.cn/XXGK/XXGK/TZTG/202104/t20210429_207386.html" target="_blank">民航局文件</a-button>
-        <a-button href="https://github.com/jerrylususu/rongduan_or_not" target="_blank" type="primary"><github-outlined /></a-button>
-
+        一个简单的熔断计算器：填入已知的阳性病例信息，计算未来会被熔断的航班。
+        <br />
+        <header-links></header-links>
         <p>不考虑奖励航班和控制客座率措施。<strong>仅供参考！</strong></p>
-        <!-- <br /> -->
+
         首个航班入境日期：<a-date-picker
           v-model:value="beginDate"
           @change="inputHandler"
@@ -110,9 +110,10 @@ import {
   Alert,
   Switch
 } from "ant-design-vue";
-  import { GithubOutlined } from '@ant-design/icons-vue';
+
 
 import DateItem from "./DateItem.vue";
+import HeaderLinks from "./HeaderLinks.vue";
 import {calculate, buildEmptyList, simulationMain } from "../utils/simulation.js";
 import { toRaw } from "@vue/reactivity";
 //   const ButtonGroup = Button.Group;
@@ -126,13 +127,13 @@ export default {
     DateItem,
     ARow: Row,
     ACol: Col,
-    GithubOutlined,
     ACollapse: Collapse,
     ACollapsePanel: Collapse.Panel,
     AForm: Form,
     AFormItem: Form.Item,
     AAlert: Alert,
     ASwitch: Switch,
+    HeaderLinks,
   },
   data() {
     return {
