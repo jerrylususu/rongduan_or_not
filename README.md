@@ -15,6 +15,8 @@
 
 icon credit: https://thenounproject.com/icon/flight-1388095/
 
+项目根目录下的 `sim2.py` 为「航班安全性计算」（实验性）的 Python 源代码。如有需要可以使用此文件进行自己的数据分析。
+
 
 ## Project setup
 ```
