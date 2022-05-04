@@ -105,7 +105,7 @@ function calculateSurely(datesDetails) {
         while (datesDetails[i].flightStatus === "no") {
         i++;
         }
-        let safeCount = 2;
+        let safeCount = 1;
         while (safeCount > 0 && i < datesDetails.length) {
         if (datesDetails[i].flightStatus === "yes") {
             safeCount--;
