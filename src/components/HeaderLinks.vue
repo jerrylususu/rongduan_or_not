@@ -9,6 +9,14 @@
       </template>
       <img src="assets/piaotips_large.jpg" style="max-width: 100%; height: auto;"/>
     </a-modal>
+    <div class="ad-container">
+        <Adsense
+            data-ad-client="ca-pub-3973436778637330"
+            data-ad-slot="5591115055"
+            data-ad-format="auto"
+            data-full-width-responsive="true">
+        </Adsense>
+    </div>
 </template>
 
 <script>
