@@ -1,6 +1,6 @@
 <template>
-    <h3 style="color: red">这是旧的熔断措施页，现已不再适用！</h3>
-    <a-button size="large" href="http://www.caac.gov.cn/XXGK/XXGK/TZTG/202104/t20210429_207386.html" target="_blank"><img src="assets/caac_logo.png" style="max-height: 75%; width: auto;"/>民航局文件</a-button> 
+    <h3>熔断措施更新于 2022/8/7</h3>
+    <a-button size="large" href="http://www.caac.gov.cn/XWZX/MHYW/202208/t20220807_214888.html" target="_blank"><img src="assets/caac_logo.png" style="max-height: 75%; width: auto;"/>民航局文件</a-button> 
     <a-button size="large" href="https://github.com/jerrylususu/rongduan_or_not" target="_blank" type="primary"><github-outlined /> Github</a-button> 
     <a-button size="large" @click="showModel"><img src="assets/piaotips_logo.png" style="max-height: 75%; width: auto;"/>  北美票帝</a-button>
     <a-modal v-model:visible="showPiaoTipsModal" title="北美票帝">

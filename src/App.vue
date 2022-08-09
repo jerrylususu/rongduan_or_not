@@ -1,6 +1,19 @@
 <template>
-  <flight-view></flight-view>
-  
+
+    <div v-if="newVersionEnabled">
+        <flight-view-new></flight-view-new>
+    </div>
+    <div v-else>
+        <flight-view></flight-view>
+    </div>
+
+    <a-row justify="space-around">
+      <a-col :lg="12" :md="24">
+        开启新版：<a-switch v-model:checked="newVersionEnabled"></a-switch>
+      </a-col>
+    </a-row>
+
+
   <component :is="'script'">
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
@@ -11,12 +24,23 @@
 </template>
 
 <script>
-import FlightView from './components/FlightView.vue'
+import { Switch, Row, Col } from 'ant-design-vue';
+import FlightView from './components/FlightView.vue';
+import FlightViewNew from './components/FlightViewNew.vue';
 
 export default {
-  name: 'App',
+  name: 'AppNew',
   components: {
-    FlightView
+    FlightView,
+    FlightViewNew,
+    ASwitch: Switch,
+    ARow: Row,
+    ACol: Col,  
+  },
+  data() {
+    return {
+        newVersionEnabled: true,
+    }
   },
   created () {
       document.title = "今天航班熔断了吗？";

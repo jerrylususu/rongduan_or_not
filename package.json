@@ -12,6 +12,7 @@
     "ant-design-vue": "^3.2.0",
     "babel-plugin-import": "^1.13.5",
     "core-js": "^3.8.3",
+    "moment": "^2.29.4",
     "vue": "^3.2.13",
     "vue-google-adsense": "^2.0.0",
     "vue-scriptx": "^0.2.5",
